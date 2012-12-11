@@ -9,6 +9,9 @@ var Tank = Class.create(Sprite, {
 	initialize: function(type,direction){
 		Sprite.call(this, 32, 32);
 		this.image = game.assets['js/images/chara3.png'];
+		this.pattern = 0;
+		this.direction = direction;
+		this.isMoving = false;
 		if (type == TANKTYPE_PLAYER) {
 			// 緑色の戦車
 			this.frame = 0;
@@ -141,10 +144,6 @@ window.onload = function() {
 		// 表示位置の指定
 		myTank.x = 128;
 		myTank.y = 160;
-		myTank.isMoving = false;
-		// 向き 0:下、1:左、2:右、3:上
-		myTank.direction = 0;
-		myTank.pattern = 0;
 		
 		// デザートカラーの戦車（敵用）のスプライトを用意。
 		var teki = new Tank(TANKTYPE_ENEMY, 0);
