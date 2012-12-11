@@ -14,19 +14,17 @@ var Tank = Class.create(Sprite, {
 			this.frame = 0;
 			// キー入力の確認や戦車の移動プログラムを登録する。
 			this.addEventListener('enterframe', function() {
-				this.animCheck++;
-				// ４方向、３パターンのうちどのフレームを使うかを計算する。
-				this.frame = this.direction * 6;
 				if (this.isMoving) {
 					this.moveBy(this.vx, this.vy);
-					if ((this.animCheck % 2) == 1) {
-						this.pattern++;
-						this.pattern %= 4;
-					}
+					// １ブロック分動いたかどうかを確認する。
 					if ((this.vx && this.x % 32 == 0) || (this.vy && this.y % 32 == 0)) {
 						this.isMoving = false;
 						this.pattern = 1;
+					} else {
+						// ４方向、３パターンのうちどのフレームを使うかを計算する。
+						this.pattern = (this.pattern + 1) % 3;
 					}
+					this.frame = this.direction * 6 + this.pattern;
 				} else {
 					this.vx = this.vy = 0;
 
@@ -53,7 +51,6 @@ var Tank = Class.create(Sprite, {
 						var y = this.y + this.vy;
 						if (0 <= x && x < SCREEN_WIDTH-32) {
 							this.isMoving = true;
-							this.animCheck = 0;	// アニメーションカウンタは必要に応じてリセット。
 							arguments.callee.call(this);
 						}
 					}
@@ -62,7 +59,6 @@ var Tank = Class.create(Sprite, {
 						var y = this.y + this.vy;
 						if (0 <=y && y < SCREEN_HEIGHT-32) {
 							this.isMoving = true;
-							this.animCheck = 0;	// アニメーションカウンタは必要に応じてリセット。
 							arguments.callee.call(this);
 						}
 					}
@@ -148,7 +144,6 @@ window.onload = function() {
 		myTank.isMoving = false;
 		// 向き 0:下、1:左、2:右、3:上
 		myTank.direction = 0;
-		myTank.animCheck = 0;	// アニメーションパターンの切替えタイミングをコントロールするために使用する。
 		myTank.pattern = 0;
 		
 		// デザートカラーの戦車（敵用）のスプライトを用意。
