@@ -10,7 +10,9 @@ var Tank = Class.create(Sprite, {
 		Sprite.call(this, 32, 32);
 		this.image = game.assets['js/images/chara3.png'];
 		if (type == TANKTYPE_PLAYER) {
+			// 緑色の戦車
 			this.frame = 0;
+			// キー入力の確認や戦車の移動プログラムを登録する。
 			this.addEventListener('enterframe', function() {
 				this.animCheck++;
 				// ４方向、３パターンのうちどのフレームを使うかを計算する。
@@ -67,6 +69,7 @@ var Tank = Class.create(Sprite, {
 				}
 			});
 		} else {
+			// デザートカラーの戦車
 			this.frame = 3;
 		}
 	}
@@ -137,7 +140,9 @@ window.onload = function() {
 	game.onload = function() {
 		game.currentScene.backgroundColor = 'rgb(239, 228, 202)';
 
+		// 緑色の戦車（自分用）のスプライトを用意。
 		var myTank = new Tank(TANKTYPE_PLAYER, 0);
+		// 表示位置の指定
 		myTank.x = 128;
 		myTank.y = 160;
 		myTank.isMoving = false;
@@ -146,13 +151,16 @@ window.onload = function() {
 		myTank.animCheck = 0;	// アニメーションパターンの切替えタイミングをコントロールするために使用する。
 		myTank.pattern = 0;
 		
+		// デザートカラーの戦車（敵用）のスプライトを用意。
 		var teki = new Tank(TANKTYPE_ENEMY, 0);
+		// 表示位置の指定
 		teki.x = 192;
 		teki.y = 160;
 
+		// 用意したスプライトをシーンに関連づける。シーンはスクラッチで言えばステージのこと。
+		// これで表示されるようになる。
 		game.currentScene.addChild(teki);
 		game.currentScene.addChild(myTank);
-
 	};
 	game.start();
 };
