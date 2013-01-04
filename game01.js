@@ -19,18 +19,7 @@ var Tank = Class.create(Sprite, {
 			this.frame = 0;
 			// キー入力の確認や戦車の移動プログラムを登録する。
 			this.addEventListener('enterframe', function() {
-				if (this.isMoving) {
-					// ｘ、ｙ座標を更新する。
-					this.moveBy(this.vx * 16, this.vy * 16);
-					// １ブロック分動いたかどうかを確認する。
-					if ((this.vx && this.x % 32 == 0) || (this.vy && this.y % 32 == 0)) {
-						this.isMoving = false;
-					} else {
-						// ４方向、３パターンのうちどのフレームを使うかを計算する。
-						this.pattern = (this.pattern + 1) % 3;
-					}
-					this.frame = this.direction * 6 + this.pattern;
-				} else {
+				if (this.isMoving == false) {
 					// 移動方向を表す情報をクリアする。
 					this.vx = this.vy = 0;
 
@@ -64,7 +53,19 @@ var Tank = Class.create(Sprite, {
 						if (0 <= x && x < SCREEN_WIDTH && 0 <= y && y < SCREEN_HEIGHT) {
 							// 一ブロック分移動した後の座標がステージの範囲内であれば移動処理を開始する。
 							this.isMoving = true;
-							arguments.callee.call(this);
+							// Timeline機能を使って移動処理を行う。
+							this.tl
+								.moveTo(x, y, 4, enchant.Easing.LINEAR)
+								.and()
+								.then(function() {
+									// ４方向、３パターンのうちどのフレームを使うかを計算する。
+									this.pattern = (this.pattern + 1) % 3;
+									this.frame = this.direction * 6 + this.pattern;
+								})
+								.then(function() {
+									this.isMoving = false;
+								});
+							
 						}
 					}
 				}
