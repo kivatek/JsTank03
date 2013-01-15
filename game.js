@@ -57,11 +57,11 @@ var Tank = Class.create(Sprite, {
 							this.tl
 								.moveTo(x, y, 4, enchant.Easing.LINEAR)
 								.and()
-								.then(function() {
+								.repeat(function() {
 									// ４方向、３パターンのうちどのフレームを使うかを計算する。
 									this.pattern = (this.pattern + 1) % 3;
 									this.frame = this.direction * 6 + this.pattern;
-								})
+								}, 4)
 								.then(function() {
 									this.isMoving = false;
 								});
